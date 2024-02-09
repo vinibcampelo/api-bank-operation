@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet id="2024-02-08T11:21:34.52748566Z" author="Vinicius Campelo">
+        <createTable tableName="transaction">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="account_id" type="bigint"/>
+            <column name="operation_type" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="decimal(13,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="event_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="transaction"
+                baseColumnNames="account_id"
+                constraintName="fk_transaction_account_id"
+                referencedTableName="account"
+                referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>
