@@ -18,6 +18,4 @@ public class Account {
 
     @Column(name = "document_number")
     private String documentNumber;
-
-    private int transaction;
 }

@@ -1,7 +1,7 @@
 package com.pismo.api.bank.operation.service.implementation;
 
-import com.pismo.api.bank.operation.dto.AccountDTO;
 import com.pismo.api.bank.operation.entity.Account;
+import com.pismo.api.bank.operation.exception.ExistsEntityException;
 import com.pismo.api.bank.operation.repository.AccountRepository;
 import com.pismo.api.bank.operation.service.AccountService;
 import org.springframework.stereotype.Service;
@@ -16,10 +16,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDTO save(AccountDTO accountRequest) {
-        Account account = Account.builder()
-                .documentNumber(accountRequest.getDocumentNumber()).build();
-
-        return AccountDTO.builder().documentNumber(this.repository.save(account).getDocumentNumber()).build();
+    public Account save(Account accountToSave) {
+        if (this.repository.existsByDocumentNumber(accountToSave.getDocumentNumber())) {
+            throw new ExistsEntityException("An account with this document number already exists.");
+        }
+        return this.repository.save(accountToSave);
     }
+
 }
