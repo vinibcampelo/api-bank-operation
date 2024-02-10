@@ -51,9 +51,4 @@ class AccountServiceTest {
         Mockito.verify(this.accountRepository, Mockito.times(1)).existsByDocumentNumber(VALID_DOCUMENT_NUMBER);
 
     }
-
-
-
-
-
 }
