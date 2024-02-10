@@ -1,7 +1,7 @@
 package com.pismo.api.bank.operation.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pismo.api.bank.operation.dto.AccountDTO;
+import com.pismo.api.bank.operation.dto.AccountRequestDTO;
 import com.pismo.api.bank.operation.entity.Account;
 import com.pismo.api.bank.operation.service.AccountService;
 import org.junit.jupiter.api.Test;
@@ -13,6 +13,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -31,7 +33,7 @@ class AccountControllerTest {
 
     @Test
     void When_CallCreateRequest_And_AccountIsValid_Then_ReturnCreatedResponse() throws Exception {
-        AccountDTO request = new AccountDTO("12345678910");
+        AccountRequestDTO request = new AccountRequestDTO("12345678910");
 
         Mockito.when(accountService.save(Mockito.any(Account.class))).thenAnswer(AdditionalAnswers.returnsFirstArg());
 
@@ -47,7 +49,7 @@ class AccountControllerTest {
     }
     @Test
     void When_CallCreateRequest_And_DocumentNumberIsNull_Then_ExpectedErrorMessageResponse() throws Exception {
-        AccountDTO request = new AccountDTO();
+        AccountRequestDTO request = new AccountRequestDTO();
 
         this.mockMvc.perform(MockMvcRequestBuilders.post(ACCOUNT_URL)
                 .content(objectMapper.writeValueAsString(request))
@@ -62,7 +64,7 @@ class AccountControllerTest {
     }
     @Test
     void When_CallCreateRequest_And_DocumentNumberIsEmpty_Then_ExpectedErrorMessageResponse() throws Exception {
-        AccountDTO request = new AccountDTO("");
+        AccountRequestDTO request = new AccountRequestDTO("");
 
         mockMvc.perform(MockMvcRequestBuilders.post(ACCOUNT_URL)
                         .content(objectMapper.writeValueAsString(request))
@@ -77,7 +79,7 @@ class AccountControllerTest {
     }
     @Test
     void When_CallCreateRequest_And_DocumentNumberIsNotANumber_Then_ExpectedErrorMessageResponse() throws Exception {
-        AccountDTO request = new AccountDTO("abc45678910");
+        AccountRequestDTO request = new AccountRequestDTO("abc45678910");
 
         mockMvc.perform(MockMvcRequestBuilders.post(ACCOUNT_URL)
                         .content(objectMapper.writeValueAsString(request))
@@ -92,9 +94,9 @@ class AccountControllerTest {
     }
     @Test
     void When_CallCreateRequest_And_DocumentNumberSizeIsLessThen11_Then_ExpectedErrorMessageResponse() throws Exception {
-        AccountDTO request = new AccountDTO("1234");
+        AccountRequestDTO request = new AccountRequestDTO("1234");
 
-        mockMvc.perform(MockMvcRequestBuilders.post(ACCOUNT_URL)
+        this.mockMvc.perform(MockMvcRequestBuilders.post(this.ACCOUNT_URL)
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -107,9 +109,9 @@ class AccountControllerTest {
     }
     @Test
     void When_CallCreateRequest_And_DocumentNumberSizeIsMoreThen11_Then_ExpectedErrorMessageResponse() throws Exception {
-        AccountDTO request = new AccountDTO("123456789123");
+        AccountRequestDTO request = new AccountRequestDTO("123456789123");
 
-        mockMvc.perform(MockMvcRequestBuilders.post(ACCOUNT_URL)
+        this.mockMvc.perform(MockMvcRequestBuilders.post(this.ACCOUNT_URL)
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -120,4 +122,35 @@ class AccountControllerTest {
 
         Mockito.verify(this.accountService, Mockito.times(0)).save(Mockito.any());
     }
+    @Test
+    void When_CallGetByIdRequest_And_ExistsById_Then_ExpectStatusOk() throws Exception {
+        Long id = 1L;
+        String documentNumber = "12345678910";
+        Account account = Account.builder()
+                .id(id)
+                .documentNumber(documentNumber)
+                .build();
+
+        Mockito.when(this.accountService.find(id)).thenReturn(Optional.of(account));
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get(this.ACCOUNT_URL + "/" + id))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString(documentNumber)))
+                .andExpect(content().string(containsString(id.toString())));
+
+        Mockito.verify(this.accountService, Mockito.times(1)).find(id);
+    }
+    @Test
+    void When_CallGetByIdRequest_And_NotExistsById_Then_ExpectStatusNoContent() throws Exception {
+        Long id = 1L;
+
+        Mockito.when(this.accountService.find(id)).thenReturn(Optional.empty());
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get(this.ACCOUNT_URL + "/" + id))
+                .andExpect(status().isNoContent());
+
+        Mockito.verify(this.accountService, Mockito.times(1)).find(id);
+    }
+
+
 }

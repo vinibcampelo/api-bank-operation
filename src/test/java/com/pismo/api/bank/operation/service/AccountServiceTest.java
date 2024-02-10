@@ -13,6 +13,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 @ExtendWith(MockitoExtension.class)
 class AccountServiceTest {
     @Mock
@@ -50,5 +52,32 @@ class AccountServiceTest {
         Mockito.verify(this.accountRepository, Mockito.times(0)).save(Mockito.any());
         Mockito.verify(this.accountRepository, Mockito.times(1)).existsByDocumentNumber(VALID_DOCUMENT_NUMBER);
 
+    }
+
+    @Test
+    void When_CallFindMethod_And_ExistsById_Then_ExpectReturnAccount() {
+        Long id = 1L;
+        Account account = Account.builder()
+                .documentNumber(this.VALID_DOCUMENT_NUMBER)
+                .id(id)
+                .build();
+
+        Mockito.when(this.accountRepository.findById(id)).thenReturn(Optional.of(account));
+
+        Optional<Account> response = this.accountService.find(id);
+
+        Assertions.assertTrue(response.isPresent());
+        Mockito.verify(this.accountRepository, Mockito.times(1)).findById(id);
+    }
+
+    @Test
+    void When_CallFindMethod_And_NotExistsById_Then_ExpectReturnEmpty() {
+        Long id = 1L;
+        Mockito.when(this.accountRepository.findById(id)).thenReturn(Optional.empty());
+
+        Optional<Account> response = this.accountService.find(id);
+
+        Assertions.assertTrue(response.isEmpty());
+        Mockito.verify(this.accountRepository, Mockito.times(1)).findById(id);
     }
 }

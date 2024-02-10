@@ -6,6 +6,8 @@ import com.pismo.api.bank.operation.repository.AccountRepository;
 import com.pismo.api.bank.operation.service.AccountService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AccountServiceImpl implements AccountService {
 
@@ -22,5 +24,8 @@ public class AccountServiceImpl implements AccountService {
         }
         return this.repository.save(accountToSave);
     }
-
+    @Override
+    public Optional<Account> find(Long id) {
+        return this.repository.findById(id);
+    }
 }

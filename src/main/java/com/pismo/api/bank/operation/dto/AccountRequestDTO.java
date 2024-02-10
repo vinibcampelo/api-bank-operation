@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountDTO {
+public class AccountRequestDTO {
 
     @Size(min = 11, max = 11, message = "Document number size is not valid.")
     @NotBlank(message = "Document number cold not be null or empty.")
