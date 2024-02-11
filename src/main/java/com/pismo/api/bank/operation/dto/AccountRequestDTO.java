@@ -17,9 +17,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AccountRequestDTO {
 
-    @Size(min = 11, max = 11, message = "Document number size is not valid.")
-    @NotBlank(message = "Document number cold not be null or empty.")
-    @Digits(integer = Integer.MAX_VALUE, fraction = 0, message = "Document number need be a number.")
+    @NotBlank
+    @Size(min = 11, max = 11)
+    @Digits(integer = Integer.MAX_VALUE, fraction = 0)
     @Schema( type = "string", example = "10245678910")
     @JsonProperty("document_number")
     private String documentNumber;

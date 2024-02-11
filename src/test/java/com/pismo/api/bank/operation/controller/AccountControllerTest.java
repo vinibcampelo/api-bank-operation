@@ -30,6 +30,7 @@ class AccountControllerTest {
     private AccountService accountService;
 
     private final String ACCOUNT_URL = "/account";
+    private final String VALIDATION_FAILED_MESSAGE = "Validation failed";
 
     @Test
     void When_CallCreateRequest_And_AccountIsValid_Then_ReturnCreatedResponse() throws Exception {
@@ -56,7 +57,7 @@ class AccountControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest())
                     .andExpect(
-                        content().string(containsString("Document number cold not be null or empty")
+                        content().string(containsString(VALIDATION_FAILED_MESSAGE)
                         )
                     );
 
@@ -71,7 +72,7 @@ class AccountControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(
-                        content().string(containsString("Document number cold not be null or empty")
+                        content().string(containsString(VALIDATION_FAILED_MESSAGE)
                         )
                 );
 
@@ -86,7 +87,7 @@ class AccountControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(
-                        content().string(containsString("Document number need be a number")
+                        content().string(containsString(VALIDATION_FAILED_MESSAGE)
                         )
                 );
 
@@ -101,7 +102,7 @@ class AccountControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(
-                        content().string(containsString("Document number size is not valid")
+                        content().string(containsString(VALIDATION_FAILED_MESSAGE)
                         )
                 );
 
@@ -116,7 +117,7 @@ class AccountControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(
-                        content().string(containsString("Document number size is not valid")
+                        content().string(containsString(VALIDATION_FAILED_MESSAGE)
                         )
                 );
 
@@ -150,6 +151,17 @@ class AccountControllerTest {
                 .andExpect(status().isNoContent());
 
         Mockito.verify(this.accountService, Mockito.times(1)).find(id);
+    }
+    @Test
+    void When_CallGetByIdRequest_And_IdIsNegative_Then_ExpectStatusBadRequest() throws Exception {
+        Long id = -1L;
+        this.mockMvc.perform(MockMvcRequestBuilders.get(this.ACCOUNT_URL + "/" + id))
+                .andExpect(status().isBadRequest())
+                .andExpect(
+                        content().string(containsString(VALIDATION_FAILED_MESSAGE))
+                        );
+
+        Mockito.verify(this.accountService, Mockito.times(0)).find(id);
     }
 
 

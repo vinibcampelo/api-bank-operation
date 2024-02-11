@@ -17,7 +17,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Digits(integer = Integer.MAX_VALUE, fraction = 0, message = "Document number need be a number")
+    @Digits(integer = Integer.MAX_VALUE, fraction = 0)
     @Column(name = "document_number", length = 11, nullable = false, unique = true)
     private String documentNumber;
 }

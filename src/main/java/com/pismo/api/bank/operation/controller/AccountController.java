@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -29,9 +30,9 @@ public class AccountController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<AccountRequestDTO> create(@Valid @RequestBody AccountRequestDTO request) {
+    public ResponseEntity<AccountResponseDTO> create(@Valid @RequestBody AccountRequestDTO request) {
         Account accountSaved = this.service.save(AccountMapper.toEntity(request));
-        return ResponseEntity.status(HttpStatus.CREATED).body(AccountMapper.toRequestDTO(accountSaved));
+        return ResponseEntity.status(HttpStatus.CREATED).body(AccountMapper.toResponseDTO(accountSaved));
     }
 
     @GetMapping("{id}")
@@ -39,13 +40,11 @@ public class AccountController {
             @ApiResponse(responseCode = "200"),
             @ApiResponse(responseCode = "204", content = @Content())
     })
-    public ResponseEntity<AccountResponseDTO> findById(@Valid @NotNull @PathVariable Long id){
+    public ResponseEntity<AccountResponseDTO> findById(@PathVariable @Valid @NotNull @Positive Long id){
         Optional<Account> account = this.service.find(id);
 
-        if (account.isPresent()) {
-            return ResponseEntity.ok(AccountMapper.toResponseDTO(account.get()));
-        } else {
-            return ResponseEntity.noContent().build();
-        }
+        return account.map(AccountMapper::toResponseDTO)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.noContent().build());
     }
 }

@@ -1,6 +1,7 @@
 package com.pismo.api.bank.operation.config;
 
 import com.pismo.api.bank.operation.exception.ExistsEntityException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -39,6 +40,13 @@ public class ApplicationControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> handleBusinessException(ExistsEntityException ex) {
         ErrorResponse errorResponse = new ErrorResponse("Entity already exists", ex.getMessage());
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException e) {
+        ErrorResponse errorResponse = new ErrorResponse("Validation failed" , e.getMessage());
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
