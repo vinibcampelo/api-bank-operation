@@ -15,5 +15,18 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
 
+  api-bank-operation:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bank_operation?serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: pismo
+      SPRING_DATASOURCE_PASSWORD: pismopass
+    ports:
+      - '8082:8080'
+
 volumes:
   mysql_data:

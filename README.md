@@ -9,7 +9,7 @@ The function of this project is to provide a Rest APIS for the financial managem
 of our customers' accounts.
 
 When you run it, you can check our API documentation through Swagger, which will be available at the following link:
-http://localhost:8080/api-bank-account/documentation
+http://localhost:8082/api-bank-account/documentation
 
 ## Tecnologies
 
@@ -30,7 +30,7 @@ http://localhost:8080/api-bank-account/documentation
 
 ### Executing program
 
-* To run this project you need just execute the command below in the project path
+* To run this project you need just execute the command below in the project file path
 ```
 docker compose up
 ```
