@@ -30,7 +30,8 @@ public class TransactionController {
 
     @PostMapping
     @Operation(summary = "Create transaction.",
-            description = "Create a new account transaction by account_id, amount and operation type.")
+            description = "Create a new account transaction by account_id, amount and operation type." +
+                    " OBS: the event_date of transaction is saved as UTC timezone")
     public ResponseEntity<TransactionResponseDTO> create(@Valid @RequestBody TransactionRequestDTO requestDTO) {
         Transaction transaction = this.transactionService.save(TransactionMapper.toEntity(requestDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(TransactionMapper.toDto(transaction));
