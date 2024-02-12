@@ -5,9 +5,11 @@ import com.pismo.api.bank.operation.dto.AccountResponseDTO;
 import com.pismo.api.bank.operation.entity.Account;
 import com.pismo.api.bank.operation.mapper.AccountMapper;
 import com.pismo.api.bank.operation.service.AccountService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -21,6 +23,7 @@ import java.util.Optional;
 @Validated
 @RestController
 @RequestMapping("accounts")
+@Tag(name="Account", description = "Manage the clients accounts.")
 public class AccountController {
     private final AccountService service;
 
@@ -30,6 +33,8 @@ public class AccountController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Create account.",
+            description = "Create a new client account by document number.")
     public ResponseEntity<AccountResponseDTO> create(@Valid @RequestBody AccountRequestDTO request) {
         Account accountSaved = this.service.save(AccountMapper.toEntity(request));
         return ResponseEntity.status(HttpStatus.CREATED).body(AccountMapper.toResponseDTO(accountSaved));
@@ -40,6 +45,8 @@ public class AccountController {
             @ApiResponse(responseCode = "200"),
             @ApiResponse(responseCode = "204", content = @Content())
     })
+    @Operation(summary = "Get account.",
+            description = "Get the account by account_id")
     public ResponseEntity<AccountResponseDTO> findById(@PathVariable @Valid @NotNull @Positive Long id){
         Optional<Account> account = this.service.find(id);
 
