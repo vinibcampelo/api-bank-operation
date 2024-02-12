@@ -29,7 +29,7 @@ class AccountControllerTest {
     @MockBean
     private AccountService accountService;
 
-    private final String ACCOUNT_URL = "/account";
+    private final String ACCOUNT_URL = "/accounts";
     private final String VALIDATION_FAILED_MESSAGE = "Validation failed";
 
     @Test

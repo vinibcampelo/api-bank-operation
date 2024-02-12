@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @Validated
 @RestController
-@RequestMapping("account")
+@RequestMapping("accounts")
 public class AccountController {
     private final AccountService service;
 

@@ -16,7 +16,7 @@
             <column name="amount" type="decimal(13,2)">
                 <constraints nullable="false"/>
             </column>
-            <column name="event_date" type="datetime">
+            <column name="event_date" type="DATETIME(6)">
                 <constraints nullable="false"/>
             </column>
         </createTable>

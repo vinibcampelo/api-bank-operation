@@ -3,10 +3,11 @@ package com.pismo.api.bank.operation.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+
 @Builder
+@Getter
 public class AccountResponseDTO {
     @Schema(type = "Long", example = "1")
     @JsonProperty("account_id")

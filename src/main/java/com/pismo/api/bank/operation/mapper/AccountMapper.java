@@ -6,11 +6,6 @@ import com.pismo.api.bank.operation.entity.Account;
 
 public class AccountMapper {
     private AccountMapper() {}
-    public static AccountRequestDTO toRequestDTO(Account account) {
-        return AccountRequestDTO.builder()
-                .documentNumber(account.getDocumentNumber())
-                .build();
-    }
 
     public static AccountResponseDTO toResponseDTO(Account account) {
         return AccountResponseDTO.builder()
