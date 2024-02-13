@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 
 
 @Builder
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
 public class TransactionResponseDTO {
 
     private Long id;

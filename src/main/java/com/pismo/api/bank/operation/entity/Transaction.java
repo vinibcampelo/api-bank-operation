@@ -2,15 +2,12 @@ package com.pismo.api.bank.operation.entity;
 
 import com.pismo.api.bank.operation.enumeration.OperationTypeEnum;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
 @Builder
 @Entity(name = "`transaction`")
 public class Transaction {
